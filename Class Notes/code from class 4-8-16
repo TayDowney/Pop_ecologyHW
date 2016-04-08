@@ -1,0 +1,78 @@
+t<- c (1,2,3,4,5)
+##or
+t<- 1:5
+##or
+t<-seq(1, 5)
+
+t
+
+N<- c(100, 158, 315, 398, 794)
+
+log.N<-log(N)
+log.N
+
+#plot(y ~ x)
+plot(log.N ~ t)
+
+#remember that c is the command to make the vector
+#hit esc and start over if you get locked
+
+#you can color it, change border, change type, etc
+
+#change type to b
+
+plot (log.N~t, type='b')
+
+#looked up how to estimate slop in google
+##r-bloggers.com is a good site
+##stack exchange
+#using lm to estimate slope
+
+?lm
+
+lm(log.N ~ t)
+##doing a dollar sign at the end will allow you to assign coefficents
+
+lm(log.N~t)$coefficients[2]
+##this pulls out the second element which is the slope of two
+##if you just run names(lm(log.N~t)) then it shows all the names you can put
+
+model<-lm(log.N~t)
+model$coefficients
+
+#the t is the slope but it is more 
+#export graph as image cause github does not do pdfs
+###End of Question 6
+
+
+#100=t, r=0.25, N0=1
+
+#first you need to simulate the model
+#using the code we did next week with ODE
+
+exp.growth <- function(t, y, p) {
+  N <- y[1]
+  with(as.list(p), {
+    dN.dt <- r * N
+    return(list(dN.dt))
+  })
+}
+
+#copy and pasted from HW file on HW instruction
+
+#there is one parameter that is r
+p<-('r' = 0.25)
+y0<-c('N' = 1)
+t<-1:100
+
+library(deSolve)
+
+##simulate the model
+sim<-ode(y=y0, times=t, func=exp.growth, parms=p, method= 'lsoda')
+#lsoda is extra and is for...
+ sim<-as.data.frame(sim)
+ 
+ p.2<- c('r'=0.8)
+ 
+ sim.2<-ode(y=y0, times=t, func=exp.growth, parms=p.2, method= 'lsoda')
+ 
