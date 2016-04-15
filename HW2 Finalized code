@@ -1,0 +1,194 @@
+Original code used before document uploaded with help:
+
+install.package('deSolve')
+library(desolve)
+
+log.growth<- function(t, y, p){
+  N<-y[1]
+  with(as.list(p), {
+    dN.dt<-r*N*(1-(N/K))
+    return(list(dN.dt))
+  })
+}
+
+p<- c('r'= 0.25, 'K'= 100)
+y0<-c('N' = runif(1, min=0.01, max=0.1))
+t<-0:100
+
+###homework stated one to a hundred so this was changed from what we did in class
+library(deSolve)
+sim<-ode(y=y0, times=t, func=log.growth, parms = p, method='lsoda')
+sim <- as.data.frame(sim)
+sim
+###This was to check that sim saved correctly
+plot(N~time, data=sim, col= 'green', type= 'l', lwd=3)
+
+p.2<- c('r'=0.25, 'K'=50)
+ 
+sim.2<-ode(y=y0, times=t, func=log.growth, parms=p.2, method= 'lsoda')
+sim.2<-as.data.frame(sim.2)
+
+p.3<-c('r'=0.25, 'K'=25)
+
+sim.3<-ode(y=y0, times=t, func=log.growth, parms=p.3, method= 'lsoda'))
+sim.3<-as.data.frame(sim.3)
+
+
+###########################################################################
+
+Rest of code and also code for theta of same data to test for problem 3:
+
+##########################################################################
+install.packages('deSolve')
+library(deSolve)
+
+log.growth<- function (t,y,p){
+  N<-y[1]
+  with(as.list(p), {
+    dN.dt<-r*N*(1-(N/K)^theta)
+    return(list(dN.dt))
+  })
+}
+
+p<-c('r'=0.25, 'K'=20, 'theta'=1)
+y0<-c('N'= runif(1, min=0.01, max=0.1))
+t<-0:100
+
+sim<-ode(y=y0, times=t, func=log.growth, parms=p, method='lsoda')
+sim<-as.data.frame(sim)
+
+plot(N~time, data=sim, type= 'l', lwd=2, bty= 'l', col= 'blue')
+
+
+###This was re-run with the sheet posted later on. The first code I did was missing the theta
+
+
+
+
+
+##additional code for 2b is below
+
+p.2<- c('r'=0.25, 'K'=50, 'theta'=1)
+ 
+sim.2<-ode(y=y0, times=t, func=log.growth, parms=p.2, method= 'lsoda')
+sim.2<-as.data.frame(sim.2)
+
+p.3<-c('r'=0.25, 'K'=25, 'theta'=1)
+
+sim.3<-ode(y=y0, times=t, func=log.growth, parms=p.3, method= 'lsoda'))
+sim.3<-as.data.frame(sim.3)
+
+
+#using code from 2a I also plotted initial figures before performing the one that was in the document.
+
+plot(N~time, data=sim.2, type= 'l', lwd=2, bty= 'l', col= 'green')
+plot(N~time, data=sim.3, type= 'l', lwd=2, bty= 'l', col= 'red')
+
+#after tested. I plotted it all on same figure as seen in additional document
+
+points(sim.2, col='green', type='l', bty='l', lwd=2)
+points(sim.3, col='red', type='l', bty='l', lwd=2)
+
+
+##this was taken from READ.ME but it was not pasted to solve 2b and 2c.
+
+sim.2$deriv<-c(diff(sim.2$N), NA)
+plot(deriv~N, data=sim.2, type='l', col='red', bty='l')
+
+sim$deriv<-c(diff(sim$N), NA)
+sim.3$deriv<-c(diff(sim.3$N), NA)
+
+points(sim.2$deriv, col='green', type='l', bty='l', lwd=2)
+points(sim$deriv, col='blue', type='l', bty='l', lwd=2)
+
+max(sim$deriv, na.rm=TRUE)
+###max for sim = 1.248295
+
+max(sim.2$deriv, na.rm=TRUE)
+###max for sim.2 = 3.113307
+
+max(sim.3$deriv, na.rm=TRUE)
+###max for sim.3 = 1.556936
+
+
+which(sim$deriv==max(sim$deriv, na.rm = TRUE))
+##[22]
+which(sim.2$deriv==max(sim.2$deriv, na.rm = TRUE))
+##[26]
+which(sim.3$deriv==max(sim.3$deriv, na.rm = TRUE))
+##[24]
+
+
+#################################################################################
+
+Answer for 2c is that the ideal population abundance is found in sim.2 or where the carrying capacity is K=50. See figure for proof.
+
+
+
+##################################################################################
+									#Code for 3
+
+##################################################################################
+
+
+
+library(deSolve)
+
+log.growth<- function (t,y,p){
+  N<-y[1]
+  with(as.list(p), {
+    dN.dt<-r*N*(1-(N/K)^theta)
+    return(list(dN.dt))
+  })
+}
+
+p<-c('r'=0.25, 'K'=50, 'theta'=0.5)
+p.2<-c('r'=0.25, 'K'=50, 'theta'=1)
+p.3<-c('r'=0.25, 'K'=50, 'theta'=1.8)
+
+y0<-c('N'= runif(1, min=0.01, max=0.1))
+t<-0:100
+
+sim<-ode(y=y0, times=t, func=log.growth, parms=p, method='lsoda')
+sim<-as.data.frame(sim)
+
+sim.2<-ode(y=y0, times=t, func=log.growth, parms=p.2, method= 'lsoda')
+sim.2<-as.data.frame(sim.2)
+
+sim.3<-ode(y=y0, times=t, func=log.growth, parms=p.3, method= 'lsoda'))
+sim.3<-as.data.frame(sim.3)
+
+plot(N~time, data=sim, type= 'l', lwd=2, bty= 'l', col= 'blue')
+points(sim.2, col='green', type='l', bty='l', lwd=2)
+points(sim.3, col='red', type='l', bty='l', lwd=2)
+
+sim$deriv<-c(diff(sim$N), NA)
+sim.2$deriv<-c(diff(sim.2$N), NA)
+sim.3$deriv<-c(diff(sim.3$N), NA)
+
+plot(deriv~N, data=sim, type='l', col='blue', bty='l', ylim= c(0, 5))
+points(sim.2$deriv, col='green', type='l', bty='l', lwd=2)
+points(sim.3$deriv, col='red', type='l', bty='l', lwd=2)
+
+max(sim$deriv, na.rm=TRUE)
+###max for sim = 1.850896
+
+max(sim.2$deriv, na.rm=TRUE)
+###max for sim.2 = 3.11437
+
+max(sim.3$deriv, na.rm=TRUE)
+###max for sim.3 = 1.556936
+
+
+which(sim$deriv==max(sim$deriv, na.rm = TRUE))
+##[32]
+which(sim.2$deriv==max(sim.2$deriv, na.rm = TRUE))
+##[27]
+which(sim.3$deriv==max(sim.3$deriv, na.rm = TRUE))
+##[24]
+
+######################################################################################
+
+#ANSWER: The species that will have the highest population abundance is species A.
+
+######################################################################################
