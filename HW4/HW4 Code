@@ -1,0 +1,37 @@
+
+library (deSolve)
+## write a function for competition
+comp <- function(t, y, p) {
+  N1 <- y[1]
+  N2 <- y[2]
+  with(as.list(p), {
+    dN1.dt <- (r1 * N1 / K1) * (1 - N1 - a12 * N2)
+    dN2.dt <- (r2 * N2 / K2) * (1 - N2 - a21 * N1)
+    return(list(c(dN1.dt, dN2.dt)))
+  })
+}
+
+
+
+## specify parameter values and initial conditions stated in the HW
+p <- c('r1' = 0.1, 'K1' = 2, 'r2' = 0.6, 'K2' = 1,
+       'a12' = 0.15,
+       'a21' = 0.3)
+y0 <- c('N1' = 0.1, 'N2' = 0.1)
+t <- 1:20
+
+sim <- ode( y= y0, times= t, func= comp, parms=p, method= 'lsoda')
+sim<- as.data.frame(sim)
+
+plot(N1 ~ time, type='l', col ='blue', bty='l', data = sim, ylim= c(0,2))
+points(N2~ time, type='l', lty=2, data=sim)
+
+##give new parameters to the function to demonstrate effects of time
+
+t1 <- 1:100
+sim2 <- ode( y= y0, times= t1, func= comp, parms=p, method= 'lsoda')
+sim2<- as.data.frame(sim2)
+
+plot(N1 ~ time, type='l', col ='blue', bty='l', data = sim2, ylim= c(0,2))
+points(N2~ time, type='l', lty=2, data=sim2)
+
