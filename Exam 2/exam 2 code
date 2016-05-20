@@ -1,0 +1,65 @@
+##Question 1 part c:
+
+library(deSolve)
+
+apocal <- function(t, y, p) {
+  H <- y[1]
+  Z <- y[2]
+  with(as.list(p), {
+    dH.dt <- r*H*((1-H)/K)-b*H*Z
+    dZ.dt <- c*H*Z-m*Z
+    return(list(c(dH.dt, dZ.dt)))
+  })
+}
+
+t<-1:100
+y0<- c('H'= 1, 'Z'=0.1)
+p<- c ('r'= 1, 'K'= 1, 
+       'b'= 1, 'c'= 1, 
+       'm'= 0.1)
+
+sim <- ode( y= y0, times= t, func= apocal, parms=p, method= 'lsoda')
+sim<- as.data.frame(sim)
+
+plot(H ~ time, type='l', col ='blue', bty='l', data = sim, ylim= c(0, 1.8))
+points(Z ~ time, type='l', lty=2, data = sim, col = 'red')
+
+#changed ylim to see peak of Zombie line
+
+plot(Z ~ H, data = sim, type = 'p', bty = 'l', pch = 20)
+
+#where I got the ratio?
+
+##Question 2:
+
+library(deSolve)
+
+apocal <- function(t, y, p) {
+  H <- y[1]
+  Z <- y[2]
+  P <- y[3]
+  with(as.list(p), {
+    dH.dt <- r*H*((1-H)/K)-b*H*Z
+    dZ.dt <- c*H*Z-m*Z-d*Z*P
+    dP.dt <- e*Z*P-n*P
+    return(list(c(dH.dt, dZ.dt, dP.dt)))
+  })
+}
+
+t<-1:100
+y0<- c('H'= 1, 'Z'=0.1, 'P'=0.1)
+p<- c ('r'= 1, 'K'= 1, 
+       'b'= 1, 'c'= 1, 
+       'm'= 0.1, 'd'= 1,
+       'e'=1, 'n'=0.1)
+
+sim <- ode( y= y0, times= t, func= apocal, parms=p, method= 'lsoda')
+sim<- as.data.frame(sim)
+
+plot(H ~ time, type='l', col ='blue', bty='l', data = sim, ylim=c(0,1.3))
+points(Z ~ time, type='l', lty=2, data = sim, col = 'red')
+points(P ~ time, type='l', lty=1, data = sim)
+
+#trying to find the ratio and dominance of race
+plot(Z ~ H, data = sim, type = 'p', bty = 'l', pch = 20)
+
